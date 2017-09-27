@@ -37,15 +37,9 @@
         </a-scene>
         <script type="text/javascript">
             window.addEventListener('click', function () {
-
-                // NEW: Move the city element to where the mark is
                 var mark = document.querySelector('#mark');
                 var el = document.querySelector('#plane');
-                // AFRAME.scenes[0].appendChild(el);
-                // el.innerHTML = content;
-                // el.setAttribute('scale', '0.1, 0.1, 0.1');
                 el.setAttribute('position', mark.getAttribute('position'));
-
             });
 
             var raycaster = document.querySelector('[ar-raycaster]');
