@@ -12,7 +12,7 @@
     <body>
         <a-scene ar>
             <a-entity id="camera" camera>
-                <a-text id="hud" position="0 -0.25 -1" align="center" color="yellow" wrap-count="300" value="poo3"></a-text>
+                <a-text id="hud" position="0 -0.25 -1" align="center" color="yellow" wrap-count="300" value="Please wait"></a-text>
                 <a-plane position="0 -0.255 -1.01" scale="0.3 0.08 0" color="black"></a-plane>
             </a-entity>
             <a-plane id="plane" position="0 0 0" rotation="-90 0 0" width="0.5" height="0.5" color="#7BC8A4" shadow>
@@ -62,34 +62,29 @@
                 mark.setAttribute('color', 'red');
             });
 
-            function updateHUD(evt, textEl) {
+            function updateHUD(camera, textEl) {
                 if (textEl === undefined) {
                     alert("no text!");
                 }
-                var camera = evt.detail.target.camera.el.components.camera;
                 if (camera === undefined) {
                     alert("no camera!");
                 }
                 var rot = camera.el.getAttribute('rotation');
                 var pos = camera.el.getAttribute('position');
-                var msg = pos['x'].toFixed(2) + "," + pos['y'].toFixed(2) + "," + pos['z'].toFixed(2) + "\n" + rot['x'].toFixed(2) + ',' + rot['y'].toFixed(2) + ',' + rot['z'].toFixed(2);
+                var msg = pos['x'].toFixed(3) + "," + pos['y'].toFixed(3) + "," + pos['z'].toFixed(3);
+                msg += "\n" + rot['x'].toFixed(2) + ',' + rot['y'].toFixed(2) + ',' + rot['z'].toFixed(2);
                 textEl.setAttribute('value', msg);
             }
 
             function onRenderStart(evt) {
                 var textEl = document.querySelector('#hud');
+                var camera = evt.detail.target.camera.el.components.camera;
                 var msg="pee";
                 console.info("renderstart");
-                //var camera = evt.detail.target.camera.el.components.camera;
-                //var camera = document.querySelector('#camera'); //.el.components.camera;
-                //textEl.setAttribute('value', msg);
-                setInterval(function(){ updateHUD(evt, textEl); }, 100);
+                setInterval(function(){ updateHUD(camera, textEl); }, 100);
             }
 
-            document.querySelector('a-scene').addEventListener('renderstart', function(evt) { //onRenderStart);
-                onRenderStart(evt);
-            });
-            //setInterval(function(){ alert("Hello"); }, 3000);
+            document.querySelector('a-scene').addEventListener('renderstart', function(evt) { onRenderStart(evt); });
 
             console.info("toplevel end");
         </script>
