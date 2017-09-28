@@ -40,8 +40,10 @@
                 </a-ring>
             </a-ring>
         </a-scene>
+
         <script type="text/javascript">
             console.info("toplevel start");
+            var foundGround = false;
             window.addEventListener('click', function () {
                 var mark = document.querySelector('#mark');
                 var el = document.querySelector('#plane');
@@ -56,6 +58,7 @@
                 // Turn the mark green and move it to the intersection point.
                 mark.setAttribute('color', 'green');
                 mark.setAttribute('position', evt.detail.intersections[0].point);
+                foundGround=true;
             });
             raycaster.addEventListener('raycaster-intersection-cleared', function (evt) {
                 // Turn the mark red.
@@ -63,17 +66,15 @@
             });
 
             function updateHUD(camera, textEl) {
-                if (textEl === undefined) {
-                    alert("no text!");
+                if (!foundGround) {
+                    textEl.setAttribute('value', 'Please point at floor');
+                } else {
+                    var rot = camera.el.getAttribute('rotation');
+                    var pos = camera.el.getAttribute('position');
+                    var msg = pos['x'].toFixed(3) + "," + pos['y'].toFixed(3) + "," + pos['z'].toFixed(3);
+                    msg += "\n" + rot['x'].toFixed(2) + ',' + rot['y'].toFixed(2) + ',' + rot['z'].toFixed(2);
+                    textEl.setAttribute('value', msg);
                 }
-                if (camera === undefined) {
-                    alert("no camera!");
-                }
-                var rot = camera.el.getAttribute('rotation');
-                var pos = camera.el.getAttribute('position');
-                var msg = pos['x'].toFixed(3) + "," + pos['y'].toFixed(3) + "," + pos['z'].toFixed(3);
-                msg += "\n" + rot['x'].toFixed(2) + ',' + rot['y'].toFixed(2) + ',' + rot['z'].toFixed(2);
-                textEl.setAttribute('value', msg);
             }
 
             function onRenderStart(evt) {
